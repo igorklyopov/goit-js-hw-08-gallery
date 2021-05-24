@@ -6,7 +6,6 @@ const lightboxImageRef = modalLightboxRef.querySelector(".lightbox__image");
 
 galleryRef.addEventListener("click", onModalLightboxOpen);
 modalLightboxRef.addEventListener("click", onModalLightboxClose);
-window.addEventListener("keydown", onModalLightboxClose);
 
 function makeGalleryItemMurkup(items) {
   return items.map(({ original, preview, description }) => {
@@ -44,8 +43,10 @@ function onModalLightboxOpen(e) {
     modalLightboxRef.classList.add("is-open");
     lightboxImageRef.src = e.target.dataset.source;
     lightboxImageRef.alt = e.target.alt;
-    console.log(lightboxImageRef.src);
   }
+
+  window.addEventListener("keydown", onModalLightboxClose);
+  window.addEventListener("keydown", switchImagesWithArrowKeys);
 }
 
 function onModalLightboxClose(e) {
@@ -58,4 +59,25 @@ function onModalLightboxClose(e) {
     lightboxImageRef.src = "";
     lightboxImageRef.alt = "";
   }
+}
+
+function switchImagesWithArrowKeys(e) {
+  let imageIndex = galleryItems.findIndex(
+    (item) => item.original === lightboxImageRef.src
+  );
+
+  if (e.code === "ArrowLeft") {
+    imageIndex === 0
+      ? (imageIndex = galleryItems.length - 1)
+      : (imageIndex -= 1);
+  }
+
+  if (e.code === "ArrowRight") {
+    imageIndex === galleryItems.length - 1
+      ? (imageIndex = 0)
+      : (imageIndex += 1);
+  }
+
+  lightboxImageRef.src = galleryItems[imageIndex].original;
+  lightboxImageRef.alt = galleryItems[imageIndex].description;
 }
