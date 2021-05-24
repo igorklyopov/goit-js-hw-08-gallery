@@ -58,6 +58,8 @@ function onModalLightboxClose(e) {
     modalLightboxRef.classList.remove("is-open");
     lightboxImageRef.src = "";
     lightboxImageRef.alt = "";
+    window.removeEventListener("keydown", onModalLightboxClose);
+    window.removeEventListener("keydown", switchImagesWithArrowKeys);
   }
 }
 
